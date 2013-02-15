@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.template import Context, loader
 from login.models import User
 
-import testAdditional
+# import testAdditional
 SUCCESS               =   1  # : a success
 ERR_BAD_CREDENTIALS   =  -1  # : (for login only) cannot find the user/password pair in the database
 ERR_USER_EXISTS       =  -2  # : (for add only) trying to add a user that already exists
@@ -49,11 +49,14 @@ def resetFixture(request):
         return controll(user)
     
 def unittestControll(request):
+    pass
+    """
     if request.path== "/TESTAPI/unitTests":
         suite = unittest.TestLoader().loadTestsFromTestCase(testAdditional.TestAdditional)
         result = unittest.TextTestRunner(stream = buffer, verbosity = 2).run(suite)
         user = {"totalTests": result.testsRun, "nrFailed": len(result.failures), "output": buffer.getvalue()}
         return HttpResponse(json.dumps(user), content_type = "application/json")
+    """
 
 def controll(obj, **args):
     return HttpResponse(json.dumps(dict([("errCode", obj)] + args.items())), content_type = "application/json")
