@@ -37,10 +37,10 @@ class User(models.Model):
     def add(self,user1,pass1):
         if self.existingUsername(user1)[0]:
             return ERR_USER_EXISTS
-        if not self.validateUsername(user1):
+        if user1 == "" or len(user1) > 128:
             return ERR_BAD_USERNAME
-            if not self.validatePassword(pass1):
-                return ERR_BAD_PASSWORD
+        if len(pass1) > 128:
+            return ERR_BAD_PASSWORD
         tobeAdd = User(user=user1, password = pass1,count=1)
         tobeAdd.save()
         return 1
@@ -55,8 +55,7 @@ class User(models.Model):
             return tempCount
         else:
             return ERR_BAD_CREDENTIALS
-
-
+        
 
 
 
