@@ -90,7 +90,7 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
@@ -116,9 +116,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+     'django.contrib.admindocs',
+     'login'
 )
 
 # A sample logging configuration. The only tangible logging
@@ -150,7 +151,16 @@ LOGGING = {
     }
 }
 
+#set up local database
+import os
+database_url = os.environ.get('DATABASE_URL',
+                              "postgres://cs169:cs169@127.0.0.1:5432/warmupprojects169")
+if os.environ.get("DATABASE_URL") is None:
+    os.environ["DATABASE_URL"] = "postgres://cs169:cs169@127.0.0.1:5432/warmupprojects169"
+
 
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
 DATABASES['default'] =  dj_database_url.config()
+
+
