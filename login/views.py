@@ -12,7 +12,7 @@ ERR_BAD_USERNAME      =  -3  # : (for add, or login) invalid user name (only emp
 ERR_BAD_PASSWORD      =  -4
 
 def controll(obj, **args):
-    return HttpResponse(json.dumps(dict([("errCode", code)] + addl.items())), content_type = MIME_APPLICATION_JSON)
+    return HttpResponse(json.dumps(dict([("errCode", obj)] + args.items())), content_type = "application/json")
 
 
 def login(request):
