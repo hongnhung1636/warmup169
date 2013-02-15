@@ -7,10 +7,10 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^users/login$', 'logincounter.views.login'),
-    url(r'^users/add$', 'logincounter.views.add'),
-    url(r'^TESTAPI/resetFixture$', 'logincounter.views.reset_fixture'),
-    url(r'^TESTAPI/unitTests$', 'logincounter.views.invoke_unittests'),
+    url(r'^users/login$', 'login.views.login'),
+    url(r'^users/add$', 'login.views.add'),
+    url(r'^TESTAPI/resetFixture$', 'login.views.reset_fixture'),
+    url(r'^TESTAPI/unitTests$', 'login.views.invoke_unittests'),
     
     url(r'(?P<path>client\.\w+$)', 'django.views.static.serve', {"document_root": settings.STATIC_ROOT})
     # url(r'^warmup/', include('warmup.foo.urls')),
