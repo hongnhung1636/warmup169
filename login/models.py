@@ -41,26 +41,18 @@ class User(models.Model):
             return ERR_BAD_USERNAME
         if len(pass1) > 128:
             return ERR_BAD_PASSWORD
-        tobeAdd = User(user=user1, password = pass1,count=1)
-        tobeAdd.save()
-        return 1
+        add1 = User(user=user1, password = pass1, count=1)
+        add1.save()
+        return SUCCESS
     
     @classmethod
     def login(self, user2, pass2):
-        temp = self.existingUsername(user2)
-        if temp[0] and temp[1].password == pass2:
-            temp[1].count+=1
-            tempCount = temp[1].count
-            temp[1].save()
-            return tempCount
+        login1 = self.existingUsername(user2)
+        if login1[0] and login1[1].password == pass2:
+            login1[1].count+=1
+            count1 = login1[1].count
+            login1[1].save()
+            return count1
         else:
             return ERR_BAD_CREDENTIALS
-        
-
-
-
-    
-    
-    
-    
     
