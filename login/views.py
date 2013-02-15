@@ -28,19 +28,19 @@ def login(request):
         return controll(SUCCESS, count = user)
     else:
         return controll(user)
-    
+
+
 def add(request):
     if request.method != "POST":
         return controll(ERR_BAD_CREDENTIALS) 
     parameters = json.loads(request.body)
     for p in ["user", "password"]:
-            if p not in parameters:
-                return controll(ERR_BAD_CREDENTIALS)
+        if p not in parameters:
+            return controll(ERR_BAD_CREDENTIALS)
     user = User.add(parameters["user"], parameters["password"])
-    if request.path == "/users/add":    
-        if user > 0:
-            return controll(SUCCESS, count = user)
-        else:
+    if user > 0:
+        return controll(SUCCESS, count = user)
+    else:
             return controll(user)
     
 def resetFixture(request):

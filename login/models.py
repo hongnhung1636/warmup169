@@ -13,14 +13,16 @@ class User(models.Model):
     user = models.CharField(max_length = max_length)
     password = models.CharField(max_length = max_length)
     count = models.IntegerField()
-
+    
+    @classmethod
     def __unicode__(self):
         return str((self.user, self.password, self.count))
     
+    @classmethod
     def TESTAPI_resetFixture(self):
         User.objects.all().delete()
         return SUCCESS
-    
+    @classmethod
     def existingUsername(self,user):
         try:
             user1 = User.objects.get(user = user)
@@ -30,6 +32,7 @@ class User(models.Model):
             user1 = ""
         return (Exist,user1)
     
+    @classmethod
     def add(self,user,password):
         if self.existingUsername(user)[0]:
             return ERR_USER_EXISTS
@@ -41,6 +44,7 @@ class User(models.Model):
         newUser.save()
         return SUCCESS
 
+    @classmethod
     def login(self, user, password1):
         getUser = self.existingUsername(user)
         checkUser = getUser[1]
