@@ -34,28 +34,25 @@ class User(models.Model):
         return (Exist,user1)
     
     @classmethod
-    def add(self,user,password):
-        if self.existingUsername(user)[0]:
+    def add(self,user1,pass1):
+        if self.userExist(user1)[0]:
             return ERR_USER_EXISTS
-        if len(password) > max_length:
-            return ERR_BAD_PASSWORD
-        if user == "" or len(user) > max_length:
+        if not self.validateUsername(user1):
             return ERR_BAD_USERNAME
-        newUser = User(userName=user, password = password,count=1)
-        newUser.save()
-        return SUCCESS
-
+            if not self.validatePassword(pass1):
+                return ERR_BAD_PASSWORD
+        tobeAdd = User(user=user1, password = pass1,count=1)
+        tobeAdd.save()
+        return 1
+    
     @classmethod
-    def login(self, user, password1):
-        getUser = self.existingUsername(user)
-        checkUser = getUser[1]
-        checkPass = getUser[1].password
-        checkCount = getUser[1].count
-        if getUser[0] and checkPass == password1:
-            checkCount+=1
-            count = checkCount
-            checkUser.save()
-            return count
+    def login(self, user2, pass2):
+        temp = self.userExist(user2)
+        if temp[0] and temp[1].password == pass2:
+            temp[1].count+=1
+            tempCount = temp[1].count
+            temp[1].save()
+            return tempCount
         else:
             return ERR_BAD_CREDENTIALS
 
