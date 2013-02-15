@@ -1,17 +1,13 @@
 from django.db import models
 
+import util
+from util import debug, log_exception
+
 # Create your models here.
 
-MAX_TEXT_LEN = 128
-SUCCESS             = 1
-ERR_BAD_CREDENTIALS = -1
-ERR_USER_EXISTS     = -2
-ERR_BAD_USERNAME    = -3
-ERR_BAD_PASSWORD    = -4
-
 class User(models.Model):
-    user = models.CharField(max_length = MAX_TEXT_LEN)
-    password = models.CharField(max_length = MAX_TEXT_LEN)
+    user = models.CharField(max_length = util.MAX_TEXT_LEN)
+    password = models.CharField(max_length = util.MAX_TEXT_LEN)
     count = models.IntegerField()
     
     @classmethod
@@ -20,13 +16,17 @@ class User(models.Model):
         try:
             user_obj = User.objects.get(user = user)
         except (User.DoesNotExist, User.MultipleObjectsReturned) as e:
-            return ERR_BAD_CREDENTIALS
+            log_exception(e)
+            return util.ERR_BAD_CREDENTIALS
         
         if user_obj.password != password:
-            return ERR_BAD_CREDENTIALS
+            debug("User '{user}' entered an incorrect password".format(user = user_obj.user))
+            return util.ERR_BAD_CREDENTIALS
             
         user_obj.count += 1    
         user_obj.save()
+        debug("User '{user}' successfully logged in, count is now {count}".format(user = user_obj.user, count = user_obj.count))
+        
         return user_obj.count
         
     @classmethod
@@ -38,19 +38,25 @@ class User(models.Model):
         except (User.DoesNotExist, User.MultipleObjectsReturned) as e:
             pass
         else:
-            return ERR_USER_EXISTS
+            # Now bail.
+            debug("User already exists.")
+            return util.ERR_USER_EXISTS
+
         # Username can't be empty. 
-        if user == "" or len(user) > MAX_TEXT_LEN:
-            return ERR_BAD_USERNAME
+        if user == "" or len(user) > util.MAX_TEXT_LEN:
+            debug("Username ('{user}') is too long or too short".format(user = user))
+            return util.ERR_BAD_USERNAME
         
-        if len(password) > MAX_TEXT_LEN:
-            return ERR_BAD_PASSWORD
+        if len(password) > util.MAX_TEXT_LEN:
+            debug("Password ('{password}') is too long".format(password = password))
+            return util.ERR_BAD_PASSWORD
         
         new_user = User(user = user, password = password, count = 1)
+        debug("Added user '{user}' with password '{password}'".format(user = user, password = password))
         new_user.save()
-        return SUCCESS
+        return util.SUCCESS
         
     @classmethod
     def TESTAPI_resetFixture(self):
         User.objects.all().delete()
-        return SUCCESS
+        return util.SUCCESS
