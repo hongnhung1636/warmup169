@@ -36,7 +36,7 @@ def add(request):
     for p in ["user", "password"]:
             if p not in parameters:
                 return controll(ERR_BAD_CREDENTIALS)
-    user = User.add(request.parameters["user"], request.parameters["password"])
+    user = User.add(parameters["user"], parameters["password"])
     if request.path == "/users/add":    
         if user > 0:
             return controll(SUCCESS, count = user)
