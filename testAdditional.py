@@ -3,7 +3,7 @@ Each file that starts with test... in this directory is scanned for subclasses o
 """
 
 import unittest
-import os
+import os, json
 import testLib
 
 
@@ -82,8 +82,16 @@ class TestAdditional(testLib.RestTestCase):
         respData = self.makeRequest("/users/add", method="POST", data = { 'user' : 'user1', 'password' : 'pass'} )
         self.assertResponse(respData, count = 1, errCode = testLib.RestTestCase.SUCCESS)
 
+    def testWrongmethod(self):
+        # not unittest
+        respData = self.makeRequest("/users/login", method="GET")
+        self.assertResponse(respData, count = None, errCode = testLib.RestTestCase.ERR_BAD_CREDENTIALS)  
         
-
+    def testParamater(self):
+        # not unittest
+        respData = self.makeRequest("/users/login", method="POST")
+        self.assertResponse(respData, count = None, errCode = testLib.RestTestCase.ERR_BAD_CREDENTIALS)  
+        
             
 if __name__ == '__main__':
         unittest.main()
