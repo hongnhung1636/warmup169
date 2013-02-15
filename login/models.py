@@ -15,48 +15,44 @@ class User(models.Model):
     count = models.IntegerField()
     
     @classmethod
-    def __unicode__(self):
-        return str((self.user, self.password, self.count))
-    
+    def login(cls, user, password):
+        # Thank you based Django.
+        try:
+            user_obj = User.objects.get(user = user)
+        except (User.DoesNotExist, User.MultipleObjectsReturned) as e:
+            return ERR_BAD_CREDENTIALS
+        if user_obj.password != password:
+            return ERR_BAD_CREDENTIALS        
+        user_obj.count += 1    
+        user_obj.save()
+        return user_obj.count
+        
+    @classmethod
+    def add(cls, user, password):
+        # NG if user already exists.
+        try:
+            user_obj = User.objects.get(user = user)
+        # But this is what we want.
+        except (User.DoesNotExist, User.MultipleObjectsReturned) as e:
+            pass
+        else:
+            return ERR_USER_EXISTS
+
+        # Username can't be empty. 
+        if user == "" or len(user) > max_length:
+            return ERR_BAD_USERNAME
+        
+        if len(password) > max_length:
+            return ERR_BAD_PASSWORD
+        
+        new_user = User(user = user, password = password, count = 1)
+        new_user.save()
+        return SUCCESS
+        
     @classmethod
     def TESTAPI_resetFixture(self):
         User.objects.all().delete()
         return SUCCESS
-    @classmethod
-    def existingUsername(self,user):
-        try:
-            user1 = User.objects.get(user = user)
-            Exist = True
-        except:
-            Exist=False
-            user1 = ""
-        return (Exist,user1)
-    
-    @classmethod
-    def add(self,user,password):
-        if self.existingUsername(user)[0]:
-            return ERR_USER_EXISTS
-        if len(password) > max_length:
-            return ERR_BAD_PASSWORD
-        if user == "" or len(user) > max_length:
-            return ERR_BAD_USERNAME
-        newUser = User(userName=user, password = password,count=1)
-        newUser.save()
-        return SUCCESS
-
-    @classmethod
-    def login(self, user, password1):
-        getUser = self.existingUsername(user)
-        checkUser = getUser[1]
-        checkPass = getUser[1].password
-        checkCount = getUser[1].count
-        if getUser[0] and checkPass == password1:
-            checkCount+=1
-            count = checkCount
-            checkUser.save()
-            return count
-        else:
-            return ERR_BAD_CREDENTIALS
 
 
 
