@@ -35,7 +35,7 @@ class User(models.Model):
     
     @classmethod
     def add(self,user1,pass1):
-        if self.existingUsername(user1):
+        if self.existingUsername(user1)[0]:
             return ERR_USER_EXISTS
         if user1 == "" or len(user1) > 128:
             return ERR_BAD_USERNAME
