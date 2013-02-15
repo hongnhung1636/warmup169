@@ -8,9 +8,10 @@ ERR_BAD_USERNAME      =  -3  # : (for add, or login) invalid user name (only emp
 ERR_BAD_PASSWORD      =  -4
 
 max_length = 128
+
 class User(models.Model):
-    user = models.CharField(max_length)
-    password = models.CharField(max_length)
+    user = models.CharField(max_length = max_length)
+    password = models.CharField(max_length = max_length)
     count = models.IntegerField()
 
     def __unicode__(self):
