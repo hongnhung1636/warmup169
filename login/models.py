@@ -35,7 +35,7 @@ class User(models.Model):
     
     @classmethod
     def add(self,user1,pass1):
-        if self.userExist(user1)[0]:
+        if self.existingUsername(user1)[0]:
             return ERR_USER_EXISTS
         if not self.validateUsername(user1):
             return ERR_BAD_USERNAME
@@ -47,7 +47,7 @@ class User(models.Model):
     
     @classmethod
     def login(self, user2, pass2):
-        temp = self.userExist(user2)
+        temp = self.existingUsername(user2)
         if temp[0] and temp[1].password == pass2:
             temp[1].count+=1
             tempCount = temp[1].count
